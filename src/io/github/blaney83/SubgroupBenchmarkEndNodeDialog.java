@@ -17,20 +17,15 @@ import org.knime.core.node.defaultnodesettings.SettingsModelIntegerBounded;
  */
 public class SubgroupBenchmarkEndNodeDialog extends DefaultNodeSettingsPane {
 
-    /**
-     * New pane for configuring SubgroupBenchmarkEnd node dialog.
-     * This is just a suggestion to demonstrate possible default dialog
-     * components.
-     */
     protected SubgroupBenchmarkEndNodeDialog() {
         super();
         
-        addDialogComponent(new DialogComponentNumber(
-                new SettingsModelIntegerBounded(
-                    SubgroupBenchmarkEndNodeModel.CFGKEY_COUNT,
-                    SubgroupBenchmarkEndNodeModel.DEFAULT_COUNT,
-                    Integer.MIN_VALUE, Integer.MAX_VALUE),
-                    "Counter:", /*step*/ 1, /*componentwidth*/ 5));
+//        addDialogComponent(new DialogComponentNumber(
+//                new SettingsModelIntegerBounded(
+//                    SubgroupBenchmarkEndNodeModel.CFGKEY_COUNT,
+//                    SubgroupBenchmarkEndNodeModel.DEFAULT_COUNT,
+//                    Integer.MIN_VALUE, Integer.MAX_VALUE),
+//                    "Counter:", /*step*/ 1, /*componentwidth*/ 5));
                     
     }
 }
