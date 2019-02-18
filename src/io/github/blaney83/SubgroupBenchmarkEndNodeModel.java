@@ -2,16 +2,14 @@ package io.github.blaney83;
 
 import java.io.File;
 import java.io.IOException;
+import java.sql.Date;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
-
-import javax.xml.datatype.DatatypeConstants;
 
 import org.knime.core.data.DataCell;
 import org.knime.core.data.DataColumnSpec;
@@ -20,36 +18,21 @@ import org.knime.core.data.DataRow;
 import org.knime.core.data.DataTable;
 import org.knime.core.data.DataTableSpec;
 import org.knime.core.data.DataTableSpecCreator;
-import org.knime.core.data.DataType;
-import org.knime.core.data.DoubleValue;
 import org.knime.core.data.RowIterator;
 import org.knime.core.data.RowKey;
-import org.knime.core.data.StringValue;
-import org.knime.core.data.container.CellFactory;
-import org.knime.core.data.container.ColumnRearranger;
-import org.knime.core.data.date.DateAndTimeCell;
-import org.knime.core.data.date.DateAndTimeUtility;
-import org.knime.core.data.date.DateAndTimeValue;
 import org.knime.core.data.def.DefaultRow;
 import org.knime.core.data.def.DoubleCell;
-import org.knime.core.data.def.IntCell;
 import org.knime.core.data.def.StringCell;
 import org.knime.core.data.time.localdatetime.LocalDateTimeCellFactory;
-import org.knime.core.node.BufferedDataContainer;
 import org.knime.core.node.BufferedDataTable;
 import org.knime.core.node.CanceledExecutionException;
-import org.knime.core.node.defaultnodesettings.SettingsModelBoolean;
-import org.knime.core.node.defaultnodesettings.SettingsModelIntegerBounded;
-import org.knime.core.node.defaultnodesettings.SettingsModelString;
-import org.knime.core.node.streamable.DataTableRowInput;
-import org.knime.time.util.DateTimeUtils;
 import org.knime.core.node.ExecutionContext;
 import org.knime.core.node.ExecutionMonitor;
 import org.knime.core.node.InvalidSettingsException;
-import org.knime.core.node.NodeLogger;
 import org.knime.core.node.NodeModel;
 import org.knime.core.node.NodeSettingsRO;
 import org.knime.core.node.NodeSettingsWO;
+import org.knime.time.util.DateTimeUtils;
 
 /**
  * This is the model implementation of SubgroupBenchmarkEnd. The downstream
@@ -63,14 +46,14 @@ public class SubgroupBenchmarkEndNodeModel extends NodeModel {
 
 	private static final int IN_PORT = 0;
 
-	private static final int DATA_TABLE_OUT_PORT = 0;
+//	private static final int DATA_TABLE_OUT_PORT = 0;
 //	private static final int TIME_TABLE_OUT_PORT = 1;
 //
 //	private static int m_runCount = 1;
 
 	private static final String TIME_TABLE_NAME = "Execution Times";
 
-	// note config keys must match with the "End" node keys!
+	// note config keys must match with the "Start" node keys!
 	private static final String CFGKEY_RUN_NAME = "runName";
 	private static final String CFGKEY_CLEAR_DATA = "clearData";
 	private static final String CFGKEY_RUN_COUNT = "runCount";
@@ -115,10 +98,6 @@ public class SubgroupBenchmarkEndNodeModel extends NodeModel {
 		public RowIterator iterator() {
 			return new RowIterator() {
 				
-				RowKey currentKey;
-				int currentIndex = 0;
-				int totalSize;
-				
 				@Override
 				public DataRow next() {
 					Iterator<Map.Entry<RowKey, DataRow>> entries = timeTableRows.entrySet().iterator();
@@ -154,10 +133,11 @@ public class SubgroupBenchmarkEndNodeModel extends NodeModel {
 		String notes = infoProperties.get(CFGKEY_RUN_NOTES);
 		DataTableSpecCreator newTableSpecs = new DataTableSpecCreator();
 		String date = infoProperties.get(CFGKEY_RUN_DATE);
-
+//		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 		DataCell[] newCells = new DataCell[3];
 		newCells[0] = new DoubleCell(estimatedElapsedTime.doubleValue());
 		newCells[1] = new LocalDateTimeCellFactory().createCell(date);
+//		newCells[1] = new LocalDateTimeCellFactory().createCell(dateFormat.format(Date.valueOf(date)));
 		newCells[2] = new StringCell(notes);
 		DefaultRow newRow = new DefaultRow(newRowKey, newCells);
 		m_timeInfoList.add(newRow);
@@ -232,9 +212,7 @@ public class SubgroupBenchmarkEndNodeModel extends NodeModel {
 
 	@Override
 	protected void reset() {
-//    	if(m_clearData.getBooleanValue()) {
-//    		m_runCount = 0;
-//    	}
+		//will have to save and clear row list
 	}
 
 	@Override
@@ -274,38 +252,22 @@ public class SubgroupBenchmarkEndNodeModel extends NodeModel {
 				notesSpec.createSpec() };
 		DataTableSpecCreator secondTableSpecCreator = new DataTableSpecCreator();
 		secondTableSpecCreator.setName(TIME_TABLE_NAME);
-		secondTableSpecCreator.addColumns(outputSpecBuilder());
 		return secondTableSpecCreator.createSpec();
 	}
 
 	@Override
 	protected void saveSettingsTo(final NodeSettingsWO settings) {
-//		settings.addInt(CFGKEY_RUN_COUNT, m_runCount);
-//		m_runName.saveSettingsTo(settings);
-
-		// default behavior should probably NOT save the settings for this because
-		// desired bahavior will probably be one clear and then additional data
-		// collection until the next clear
-//    	m_clearData.saveSettingsTo(settings);
+		// not needed at this time
 	}
 
 	@Override
 	protected void loadValidatedSettingsFrom(final NodeSettingsRO settings) throws InvalidSettingsException {
-//		m_runCount = settings.getInt(CFGKEY_RUN_COUNT);
-//		m_runName.setStringValue(settings.getString(CFGKEY_RUN_NAME));
-
-//    	m_clearData.setBooleanValue(settings.getBoolean(CFGKEY_CLEAR_DATA));
+		// not needed at this time
 	}
 
 	@Override
 	protected void validateSettings(final NodeSettingsRO settings) throws InvalidSettingsException {
-//		if (m_runName.getStringValue().trim().length() == 0) {
-//			throw new InvalidSettingsException(
-//					"Please enter a valid name for Row Key seed in the benchmarked output table or leave it blank.");
-//		}
-//		if (m_clearData.getBooleanValue()) {
-//			m_runCount = 0;
-//		}
+		// not needed at this time
 	}
 
 	@Override
