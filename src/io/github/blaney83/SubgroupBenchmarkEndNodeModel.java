@@ -46,11 +46,6 @@ public class SubgroupBenchmarkEndNodeModel extends NodeModel {
 
 	private static final int IN_PORT = 0;
 
-//	private static final int DATA_TABLE_OUT_PORT = 0;
-//	private static final int TIME_TABLE_OUT_PORT = 1;
-//
-//	private static int m_runCount = 1;
-
 	private static final String TIME_TABLE_NAME = "Execution Times";
 
 	// note config keys must match with the "Start" node keys!
@@ -82,9 +77,7 @@ public class SubgroupBenchmarkEndNodeModel extends NodeModel {
 		private final DataTableSpec timeTableSpec;
 		private final Map<RowKey, DataRow> timeTableRows;
 
-		public TimeTable(final DataTableSpec spec
-//				,final Map<RowKey, DataRow> rows
-				) {
+		public TimeTable(final DataTableSpec spec) {
 			this.timeTableSpec = spec;
 			this.timeTableRows = new LinkedHashMap<RowKey, DataRow>();
 		}
@@ -133,11 +126,9 @@ public class SubgroupBenchmarkEndNodeModel extends NodeModel {
 		String notes = infoProperties.get(CFGKEY_RUN_NOTES);
 		DataTableSpecCreator newTableSpecs = new DataTableSpecCreator();
 		String date = infoProperties.get(CFGKEY_RUN_DATE);
-//		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 		DataCell[] newCells = new DataCell[3];
 		newCells[0] = new DoubleCell(estimatedElapsedTime.doubleValue());
 		newCells[1] = new LocalDateTimeCellFactory().createCell(date);
-//		newCells[1] = new LocalDateTimeCellFactory().createCell(dateFormat.format(Date.valueOf(date)));
 		newCells[2] = new StringCell(notes);
 		DefaultRow newRow = new DefaultRow(newRowKey, newCells);
 		m_timeInfoList.add(newRow);
@@ -147,69 +138,7 @@ public class SubgroupBenchmarkEndNodeModel extends NodeModel {
 		}
 		return timeTable;
 	}
-//
-//	private class TimeCellFactory implements CellFactory {
-//
-//		private final List<Double> m_timeList;
-//		private final List<LocalDateTime> m_dateList;
-//		private final List<String> m_noteList;
-//		private final DataTableSpec m_tableSpec;
-//
-//		public TimeCellFactory(final DataTableSpec tableSpec, final List<Double> timeList,
-//				final List<LocalDateTime> dateList, final List<String> noteList) {
-//			this.m_tableSpec = tableSpec;
-//			this.m_timeList = timeList;
-//			this.m_dateList = dateList;
-//			this.m_noteList = noteList;
-//		}
-//
-//		@Override
-//		public DataCell[] getCells(DataRow row) {
-//			DataCell[] outGoingCells = new DataCell[row.getNumCells()];
-//			int count = 0;
-//			for(DataColumnSpec colSpec : m_tableSpec) {
-//				DataCell newCell;
-//				switch(count) {
-//				case(0):
-//					newCell = new DoubleCell(estimatedElapsedTime.doubleValue());
-//					break;
-//				case(1):
-//					newCell = new DateAndTimeCell(date.getYear(), date.getMonth(), date.getDayOfMonth(), date.getHour(), date.getMinute(), date.getSecond());
-//					break;
-//				case(2):
-//					newCell = new StringCell(notes[]);
-//					break;
-//				}
-//				count ++;
-//			}
-//			return null;
-//		}
-//
-//		@Override
-//		public DataColumnSpec[] getColumnSpecs() {
-//			List<DataColumnSpec> outGoingColSpecs = new LinkedList<DataColumnSpec>();
-//			for (DataColumnSpec colSpec : m_tableSpec) {
-//				outGoingColSpecs.add(colSpec);
-//			}
-//			return outGoingColSpecs.toArray(new DataColumnSpec[outGoingColSpecs.size()]);
-//		}
-//
-//		@Override
-//		public void setProgress(int curRowNr, int rowCount, RowKey lastKey, ExecutionMonitor exec) {
-//
-//		}
-//
-//	}
-
-//	private Map<String, String> propertiesBuilder() {
-//		Map<String, String> properties = new LinkedHashMap<String, String>();
-//		properties.put(CFGKEY_START_TIME, Long.toString(System.nanoTime()));
-//		properties.put(CFGKEY_RUN_COUNT, Integer.toString(m_runCount));
-//		properties.put(CFGKEY_RUN_NAME, m_runName.getStringValue());
-//		properties.put(CFGKEY_CLEAR_DATA, Boolean.toString(m_clearData.getBooleanValue()));
-//		return properties;
-//	}
-
+	
 	@Override
 	protected void reset() {
 		//will have to save and clear row list

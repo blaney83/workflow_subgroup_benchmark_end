@@ -13,45 +13,30 @@ import org.knime.core.node.NodeView;
 public class SubgroupBenchmarkEndNodeFactory 
         extends NodeFactory<SubgroupBenchmarkEndNodeModel> {
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public SubgroupBenchmarkEndNodeModel createNodeModel() {
         return new SubgroupBenchmarkEndNodeModel();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public int getNrNodeViews() {
         return 0;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public NodeView<SubgroupBenchmarkEndNodeModel> createNodeView(final int viewIndex,
             final SubgroupBenchmarkEndNodeModel nodeModel) {
-        return new SubgroupBenchmarkEndNodeView(nodeModel);
+        return null;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public boolean hasDialog() {
-        return true;
+        return false;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public NodeDialogPane createNodeDialogPane() {
-        return new SubgroupBenchmarkEndNodeDialog();
+        return null;
     }
 
 }
